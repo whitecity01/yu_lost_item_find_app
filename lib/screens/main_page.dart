@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:yu_lost_item/screens/home/report_item/report_item_page.dart';
 
 class MainPage extends StatelessWidget {
-  MainPage({super.key});
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final phoneController = TextEditingController();
-  final passwordController = TextEditingController();
-  final passwordCheckController = TextEditingController();
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +21,9 @@ class MainPage extends StatelessWidget {
                 height: 220,
               ),
               const SizedBox(height: 25.0),
-              buildButton(context, "분실물 신고", MainPage()),
+              buildButton(context, "분실물 신고", const ReportItemPage()),
               const SizedBox(height: 50.0),
-              buildButton(context, "분실물 찾기", MainPage()),
+              buildButton(context, "분실물 찾기", const MainPage()),
             ],
           ),
         ),
