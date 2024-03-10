@@ -124,6 +124,7 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
   }
 
   Future<void> _reportItem() async {
+    findDate = findDate.isEmpty ? DateTime.now().toIso8601String() : findDate;
     final Map<String, dynamic> reportItemDto = {
       'title': titleController.text,
       'assignLocation': assignLocationController.text,
@@ -132,10 +133,9 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
       'longitude': longitude,
       'itemCategory': selectedItem,
     };
-
     String reportItemDtoJson = jsonEncode(reportItemDto);
 
-// reportItemDtoJson을 MultipartFile로 변환
+    // reportItemDtoJson을 MultipartFile로 변환
     MultipartFile reportItemDtoFile = MultipartFile.fromString(
       reportItemDtoJson,
       filename: 'reportItemDto.json', // 필요한 경우 적절한 파일명 지정
@@ -161,9 +161,9 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
 
     if (dio == 200 && context.mounted) {
       //Navigator.pop(context);
-      successAlert(context, "회원가입이 정상적으로 완료되었습니다.");
+      successAlert(context, "분실물 신고가 정상적으로 완료되었습니다.");
     } else {
-      print('회원가입 실패');
+      print('분실물 신고 실패');
     }
   }
 
@@ -256,3 +256,7 @@ InputDecoration getInputDecoration({required String labelText}) {
     contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
   );
 }
+
+
+// 문제점
+// 1. gps있는사진 골랐다가 바꿨을 때, gps없는 사진이면 이전의 사진의 gps가 저장됨
