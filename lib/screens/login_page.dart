@@ -98,7 +98,8 @@ class LoginPage extends StatelessWidget {
                       // res == 200 추가 해야함
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MainPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const MainPage()),
                       );
                     } else {
                       print('로그인 실패');
