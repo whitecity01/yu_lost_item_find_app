@@ -23,7 +23,7 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
   double latitude = 0;
   double longitude = 0;
   String findDate = "";
-  XFile? _image; // 이미지 저장
+  XFile? _image;
   String selectedItem = "etc";
 
   final Map<String, String> items = {
@@ -41,7 +41,6 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
     XFile? pickedFile;
 
     try {
-      // 갤러리에서 사진 선택
       pickedFile = await picker.pickImage(source: ImageSource.gallery);
     } on PlatformException catch (e) {
       switch (e.code.toLowerCase()) {
@@ -91,9 +90,7 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
       if (data.containsKey('EXIF DateTimeOriginal')) {
         IfdTag? imageDateTime = data['EXIF DateTimeOriginal'];
         if (imageDateTime != null) {
-          // imageDateTime.values.toList()가 Uint8List 타입을 반환한다고 가정
           List byteData = imageDateTime.values.toList();
-          // 바이트 데이터를 문자열로 변환
           findDate = String.fromCharCodes(byteData as Iterable<int>);
           print(findDate);
         } else {
@@ -114,9 +111,6 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
 
         latitude = convertToDecimal(latitudeValues);
         longitude = convertToDecimal(longitudeValues);
-
-        print(latitude);
-        print(longitude);
       } else {
         print("No GPS information found");
       }
@@ -135,11 +129,10 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
     };
     String reportItemDtoJson = jsonEncode(reportItemDto);
 
-    // reportItemDtoJson을 MultipartFile로 변환
     MultipartFile reportItemDtoFile = MultipartFile.fromString(
       reportItemDtoJson,
-      filename: 'reportItemDto.json', // 필요한 경우 적절한 파일명 지정
-      contentType: MediaType('application', 'json'), // MIME 타입 지정
+      filename: 'reportItemDto.json',
+      contentType: MediaType('application', 'json'),
     );
 
     FormData formData = FormData();
@@ -153,17 +146,29 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
         reportItemDtoFile,
       ),
     ]);
-    //print(formData)
 
     Dio dio = Dio();
-    await dio.post("$serverIp/reportItem", data: formData);
-    print(dio);
+    try {
+      Response response = await dio.post(
+        "$serverIp/reportItem",
+        data: formData,
+      );
+      int statusCode = response.statusCode ?? 0;
 
-    if (dio == 200 && context.mounted) {
-      //Navigator.pop(context);
-      successAlert(context, "분실물 신고가 정상적으로 완료되었습니다.");
-    } else {
-      print('분실물 신고 실패');
+      if (statusCode == 200 && context.mounted) {
+        Navigator.pop(context);
+        successAlert(context, "분실물 신고가 정상적으로 완료되었습니다.");
+      } else {
+        print('분실물 신고 실패: 상태 코드 $statusCode');
+      }
+    } on DioException catch (e) {
+      // 에러 처리
+      if (e.response != null) {
+        print('분실물 신고 실패: 상태 코드 ${e.response?.statusCode}');
+        print('응답 데이터: ${e.response?.data}');
+      } else {
+        print('요청 에러: $e');
+      }
     }
   }
 
@@ -242,7 +247,6 @@ class _ReportFormWidgetState extends State<ReportFormWidget> {
   }
 }
 
-// 커스텀 InputDecoration
 InputDecoration getInputDecoration({required String labelText}) {
   return InputDecoration(
     labelText: labelText,
@@ -256,7 +260,3 @@ InputDecoration getInputDecoration({required String labelText}) {
     contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
   );
 }
-
-
-// 문제점
-// 1. gps있는사진 골랐다가 바꿨을 때, gps없는 사진이면 이전의 사진의 gps가 저장됨
