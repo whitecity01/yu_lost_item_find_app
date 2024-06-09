@@ -25,13 +25,11 @@ class LoginPage extends StatelessWidget {
                   height: 100,
                 ),
                 Image.asset(
-                  // 로고
                   'assets/yu_logo.png',
                   width: 261,
                   height: 220,
                 ),
                 const Text(
-                  // 앱 제목
                   "영남대 분실물 찾기 앱",
                   style: TextStyle(
                       color: Colors.black,
@@ -42,7 +40,6 @@ class LoginPage extends StatelessWidget {
                   height: 30,
                 ),
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  // 로그인 입력
                   TextFormField(
                     controller: emailController,
                     decoration: const InputDecoration(
@@ -87,15 +84,12 @@ class LoginPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     final loginDto = jsonEncode({
-                      // login DTO 생성
                       'email': emailController.text,
                       'password': passwordController.text,
                     });
 
-                    final res = await sendToServer(loginDto); // 로그인 요청
-                    print(res);
-                    if (context.mounted) {
-                      // res == 200 추가 해야함
+                    final res = await sendToServer(loginDto);
+                    if (res == 200) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -123,7 +117,6 @@ class LoginPage extends StatelessWidget {
 }
 
 Future<int> sendToServer(Object loginDto) async {
-  print(loginDto);
   final res = await http.post(
     Uri.parse("$serverIp/auth/signin"),
     headers: {'Content-Type': 'application/json'},
