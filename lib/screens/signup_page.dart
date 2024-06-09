@@ -24,8 +24,8 @@ class SignUpPage extends StatelessWidget {
           message: 'Back',
           child: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => {Navigator.pop(context)}, // 눌렀을 때 이벤트
-            color: Colors.black, // 버튼 색
+            onPressed: () => {Navigator.pop(context)},
+            color: Colors.black,
           ),
         ),
         title: const Text(
@@ -41,7 +41,6 @@ class SignUpPage extends StatelessWidget {
             child: Column(
               children: [
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  // 로그인 입력
                   const SizedBox(height: 25.0),
                   TextFormField(
                     controller: nameController,
@@ -71,7 +70,6 @@ class SignUpPage extends StatelessWidget {
                 ]),
                 ElevatedButton(
                   onPressed: () async {
-                    // 비밀번호 일치 확인
                     if (passwordController.text !=
                         passwordCheckController.text) {
                       warningAlert(context, "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
@@ -79,14 +77,13 @@ class SignUpPage extends StatelessWidget {
                     }
 
                     final signupDto = jsonEncode({
-                      // signup DTO 생성
                       'name': nameController.text,
                       'email': emailController.text,
                       'phone': phoneController.text,
                       'password': passwordController.text,
                     });
 
-                    final res = await sendToServer(signupDto); // 로그인 요청
+                    final res = await sendToServer(signupDto);
                     print(res);
                     if (res == 200 && context.mounted) {
                       Navigator.pop(context);
