@@ -110,7 +110,7 @@ class _SearchByMapPageState extends State<SearchByMapPage> {
                           child: TextField(
                             controller: _searchController,
                             decoration: const InputDecoration(
-                              hintText: '기관명 또는 주소로 검색',
+                              hintText: '제목 검색',
                               border: InputBorder.none,
                             ),
                           ),
