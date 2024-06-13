@@ -79,7 +79,7 @@ class SignUpPage extends StatelessWidget {
                     final signupDto = jsonEncode({
                       'name': nameController.text,
                       'email': emailController.text,
-                      'phone': phoneController.text,
+                      'phoneNumber': phoneController.text,
                       'password': passwordController.text,
                     });
 
