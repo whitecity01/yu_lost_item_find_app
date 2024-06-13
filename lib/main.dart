@@ -8,6 +8,7 @@ void main() async {
   getEnv();
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/env/.env");
+  serverIp = dotenv.env['SERVER_IP'];
   AuthRepository.initialize(appKey: dotenv.env['APP_KEY'] ?? '');
   runApp(const MyApp());
 }
